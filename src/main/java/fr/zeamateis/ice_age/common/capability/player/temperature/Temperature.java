@@ -55,9 +55,8 @@ public class Temperature implements ITemperature {
 
     @Override
     public void synchronize() {
-        //System.out.println("SEND PACKET TEMP");
-        // if (player != null && !player.getEntityWorld().isRemote) {
-        AmyNetwork.sendPacketToEveryone(new PacketTemperature(getTemperature()));
-        // }
+        if (player != null && !player.getEntityWorld().isRemote) {
+            AmyNetwork.sendPacketToEveryone(new PacketTemperature(getTemperature()));
+        }
     }
 }

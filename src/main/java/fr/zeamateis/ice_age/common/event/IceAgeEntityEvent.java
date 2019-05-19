@@ -210,6 +210,18 @@ public class IceAgeEntityEvent {
 
         }, Blocks.SPRUCE_LEAVES);
 
+        Minecraft.getInstance().getBlockColors().register(new IBlockColor() {
+            @Override
+            public int getColor(IBlockState iBlockState, @Nullable IWorldReaderBase iWorldReaderBase, @Nullable BlockPos blockPos, int i) {
+
+                if (DayCounterWorldSavedData.get(event.getPlayer().world).getAgeInDays() >= 15) {
+                    return 0x25698e;
+                }
+                return 0;
+            }
+
+        }, Blocks.GRASS, Blocks.TALL_GRASS, Blocks.GRASS_BLOCK, Blocks.FERN, Blocks.LARGE_FERN);
+
     }
 
 

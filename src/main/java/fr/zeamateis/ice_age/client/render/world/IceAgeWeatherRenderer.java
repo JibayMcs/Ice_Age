@@ -71,8 +71,8 @@ public class IceAgeWeatherRenderer implements IRenderHandler {
             for (int k1 = k - i1; k1 <= k + i1; ++k1) {
                 for (int l1 = i - i1; l1 <= i + i1; ++l1) {
                     int i2 = (k1 - k + 16) * 32 + l1 - i + 16;
-                    double d3 = (double) rainXCoords[i2] * 0.5D;
-                    double d4 = (double) rainYCoords[i2] * 0.5D;
+                    double d3 = (double) rainXCoords[i2] * random.nextDouble();
+                    double d4 = (double) rainYCoords[i2] * random.nextDouble();
                     mutableBlockPos.setPos(l1, 0, k1);
                     Biome biome = world.getBiome(mutableBlockPos);
                     if (biome.getPrecipitation() != Biome.RainType.NONE) {

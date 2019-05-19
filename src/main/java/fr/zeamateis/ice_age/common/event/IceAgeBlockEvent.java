@@ -2,10 +2,8 @@ package fr.zeamateis.ice_age.common.event;
 
 import fr.zeamateis.ice_age.common.IceAgeMod;
 import fr.zeamateis.ice_age.common.world.DayCounterWorldSavedData;
-import net.minecraft.block.BlockLog;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.World;
@@ -20,7 +18,7 @@ public class IceAgeBlockEvent {
 
     @SubscribeEvent
     public static void harvestDrops(BlockEvent.HarvestDropsEvent event) {
-        World world = event.getWorld().getWorld();
+        /*World world = event.getWorld().getWorld();
 
         if (DayCounterWorldSavedData.get(world).getAgeInDays() >= 15) {
             if (event.getState().isIn(BlockTags.LOGS)) {
@@ -29,7 +27,7 @@ public class IceAgeBlockEvent {
                     event.getDrops().add(new ItemStack(Blocks.STONE));
                 });
             }
-        }
+        }*/
     }
 
     @SubscribeEvent
@@ -38,7 +36,7 @@ public class IceAgeBlockEvent {
         World world = event.getWorld().getWorld();
 
         if (DayCounterWorldSavedData.get(world).getAgeInDays() >= 15) {
-            if (event.getState().getBlock() instanceof BlockLog) {
+            if (event.getState().isIn(BlockTags.LOGS)) {
                 if (isPlayerHarvestingLogWithoutCorrectTool(event.getState(), event.getPlayer())) {
                     event.setCanceled(true);
                 }
@@ -52,7 +50,7 @@ public class IceAgeBlockEvent {
         World world = event.getEntityPlayer().world;
 
         if (DayCounterWorldSavedData.get(world).getAgeInDays() >= 15) {
-            if (event.getState().getBlock() instanceof BlockLog) {
+            if (event.getState().isIn(BlockTags.LOGS)) {
                 if (isPlayerHarvestingLogWithoutCorrectTool(event.getState(), event.getEntityPlayer())) {
                     event.setCanceled(true);
                 } else {
