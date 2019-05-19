@@ -1,0 +1,27 @@
+modLoader="javafml"
+loaderVersion="[25,)"
+#issueTrackerURL=""
+
+[[mods]]
+modId="ice_age"
+version="${file.jarVersion}"
+displayName="Ice Age"
+#updateJSONURL=""
+displayURL="https://www.minecraftforgefrance.fr/"
+#logoFile="logo.png"
+credits=""
+authors="ZeAmateis"
+description=''''''
+
+[[dependencies.ice_age]] #optional
+    modId="forge"
+    mandatory=true
+    versionRange="[25,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.ice_age]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.13.2]"
+    ordering="NONE"
+    side="BOTH"
