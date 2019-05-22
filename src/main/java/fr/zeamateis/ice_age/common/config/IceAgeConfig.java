@@ -1,65 +1,74 @@
 package fr.zeamateis.ice_age.common.config;
 
+import com.google.common.collect.Lists;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
-import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
-import net.minecraftforge.common.ForgeConfigSpec.EnumValue;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.List;
 
 public class IceAgeConfig {
 
-    private final ForgeConfigSpec clientSpec;
-    private final Client client;
+    public static final ForgeConfigSpec CLIENT_SPECS;
+    public static final Client CLIENT;
 
-    public IceAgeConfig() {
-        Pair<Client, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Client::new);
-        clientSpec = specPair.getRight();
-        client = specPair.getLeft();
-    }
+    public static final ForgeConfigSpec COMMON_SPECS;
+    public static final Common COMMON;
 
-    public Client getClient() {
-        return client;
-    }
+    public static final ForgeConfigSpec SERVER_SPECS;
+    public static final Server SERVER;
 
-    public void register(ModLoadingContext context) {
-        context.registerConfig(ModConfig.Type.CLIENT, clientSpec);
+    static {
+
+        Pair<Client, ForgeConfigSpec> clientPair = new ForgeConfigSpec.Builder().configure(Client::new);
+        CLIENT_SPECS = clientPair.getRight();
+        CLIENT = clientPair.getLeft();
+
+        Pair<Common, ForgeConfigSpec> commonPair = new ForgeConfigSpec.Builder().configure(Common::new);
+        COMMON_SPECS = commonPair.getRight();
+        COMMON = commonPair.getLeft();
+
+        Pair<Server, ForgeConfigSpec> serverPair = new ForgeConfigSpec.Builder().configure(Server::new);
+        SERVER_SPECS = serverPair.getRight();
+        SERVER = serverPair.getLeft();
     }
 
     public static class Client {
 
-        final BooleanValue showInGameOverlay, showEntityNameInOverlay, showEntityStatsInOverlay;
+        public Client(ForgeConfigSpec.Builder builder) {
+            builder.comment("Client config")
+                    .push("client");
 
-        final ConfigValue<String> damageParticleColor;
+            builder.pop();
+        }
+    }
 
-        final EnumValue<EnumGuiPos> overlayPosition;
+    public static class Common {
 
-        Client(ForgeConfigSpec.Builder builder) {
-            builder.comment("Client-only settings").push("client");
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> furDropEntities;
 
-            showInGameOverlay = builder.comment("Show InGame Damage Indicator Overlay ?").translation("ice_age.config.client.showInGameOverlay").define("showInGameOverlay", true);
-            showEntityNameInOverlay = builder.comment("Show Entity Name On Damage Indicator Overlay ?").translation("ice_age.config.client.showEntityNameInOverlay")
-                    .define("showEntityNameInOverlay", true);
-            showEntityStatsInOverlay = builder.comment("Show Entity Stats On Damage Indicator Overlay ?").translation("ice_age.config.client.showEntityStatsInOverlay")
-                    .define("showEntityStatsInOverlay", true);
+        public Common(ForgeConfigSpec.Builder builder) {
+            builder.comment("Common config")
+                    .push("common");
 
-            damageParticleColor = builder.comment("Use hexadecimals colors for damage particles color").translation("ice_age.config.client.damageParticleColor").define("damageParticleColor",
-                    "0xff1616");
-
-            overlayPosition = builder.comment("Only use 'TOP_LEFT', 'TOP_RIGHT', 'BOTTOM_LEFT', or 'BOTTOM_RIGHT' positions").translation("ice_age.config.client.overlayPosition")
-                    .defineEnum("overlayPosition", EnumGuiPos.TOP_LEFT);
+            furDropEntities = builder
+                    .comment("List of entity that can drop fur item").defineList("furDropEntities", Lists.newArrayList(), o -> o instanceof String);
 
             builder.pop();
         }
 
-        public enum EnumGuiPos {
-            TOP_LEFT,
-            TOP_RIGHT,
-            BOTTOM_LEFT,
-            BOTTOM_RIGHT
+    }
+
+    public static class Server {
+
+
+        public Server(ForgeConfigSpec.Builder builder) {
+            builder.comment("Server config")
+                    .push("server");
+
+            builder.pop();
         }
 
     }
+
 
 }

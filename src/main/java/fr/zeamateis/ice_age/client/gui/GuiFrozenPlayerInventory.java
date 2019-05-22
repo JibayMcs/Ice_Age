@@ -8,7 +8,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+/**
+ * @author MFF Team
+ */
+@OnlyIn(Dist.CLIENT)
 public class GuiFrozenPlayerInventory extends GuiContainer {
     private final ResourceLocation tex = ResourceBuilder.build("textures/gui/frozen_player.png");
     private final Entity deadPlayer;

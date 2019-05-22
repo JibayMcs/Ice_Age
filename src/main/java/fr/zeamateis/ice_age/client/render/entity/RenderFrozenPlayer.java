@@ -12,10 +12,13 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Random;
 
+@OnlyIn(Dist.CLIENT)
 public class RenderFrozenPlayer extends Render<EntityFrozenDeadPlayer> {
 
     private final ModelPlayerCorpse model = new ModelPlayerCorpse(0.0F, 64, 64);

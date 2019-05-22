@@ -21,7 +21,6 @@ public class AmyNetwork {
     }
 
     public static <M> SimpleChannel.MessageBuilder<M> messageBuilder(Class<M> packetIn) {
-        System.out.println(id);
         return getNetworkChannel().messageBuilder(packetIn, id++);
     }
 

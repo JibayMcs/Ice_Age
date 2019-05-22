@@ -1,12 +1,12 @@
 package fr.zeamateis.ice_age.common.event;
 
 import fr.zeamateis.amy.network.AmyNetwork;
-import fr.zeamateis.amy.resources.ResourceBuilder;
 import fr.zeamateis.ice_age.common.IceAgeMod;
 import fr.zeamateis.ice_age.common.capability.player.temperature.CapabilityTemperature;
 import fr.zeamateis.ice_age.common.entity.EntityFrozenDeadPlayer;
 import fr.zeamateis.ice_age.common.world.DayCounterWorldSavedData;
 import fr.zeamateis.ice_age.init.IceAgeDamageSource;
+import fr.zeamateis.ice_age.init.IceAgeItems;
 import fr.zeamateis.ice_age.network.packet.PacketSnowStorm;
 import fr.zeamateis.ice_age.network.packet.PacketWorldDay;
 import net.minecraft.block.Block;
@@ -14,19 +14,21 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.registry.IRegistry;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumLightType;
 import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.storage.loot.*;
-import net.minecraft.world.storage.loot.conditions.LootCondition;
-import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -35,9 +37,12 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 @EventBusSubscriber(modid = IceAgeMod.MODID, bus = EventBusSubscriber.Bus.FORGE)
 public class IceAgeEntityEvent {
+
+    private static final Random random = new Random();
 
     @SubscribeEvent
     public static void onLivingHurt(LivingHurtEvent event) {
@@ -220,21 +225,45 @@ public class IceAgeEntityEvent {
                 return 0;
             }
 
-        }, Blocks.GRASS, Blocks.TALL_GRASS, Blocks.GRASS_BLOCK, Blocks.FERN, Blocks.LARGE_FERN);
+        }, Blocks.GRASS, Blocks.TALL_GRASS, Blocks.FERN, Blocks.LARGE_FERN);
 
     }
 
 
-    @SubscribeEvent
+    /**
+     * TODO Enable loot table load event
+     * <p>
+     * Apparently is desactivated in 1.13.x
+     * https://github.com/MinecraftForge/MinecraftForge/issues/5671
+     *
+     * @param event
+     */
+    /*@SubscribeEvent
     public static void onLootTableLoad(LootTableLoadEvent event) {
+
         LootEntry entry = new LootEntryTable(ResourceBuilder.build("inject/nether_star_test"), 1, 1, new LootCondition[0], "nether_star_test");
 
+
         if (event.getName().equals(LootTableList.ENTITIES_POLAR_BEAR)) {
+            System.out.println("YAYA TRY TO ADD LOOT");
 
             LootPool pool = new LootPool(new LootEntry[]{entry}, new LootCondition[0], new RandomValueRange(0, 1), new RandomValueRange(0), "nether_star_test");
 
             event.getTable().addPool(pool);
+
+            System.out.println("YAYA ADDED LOOT");
         }
+    }*/
+    @SubscribeEvent
+    public static void onEntityDrop(LivingDropsEvent event) {
+        EntityItem itemFur = new EntityItem(event.getEntityLiving().world, event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ, new ItemStack(IceAgeItems.FUR, random.nextInt(3)));
+
+        for (String entityRegistryName : IceAgeMod.getConfig().COMMON.furDropEntities.get()) {
+            if (IRegistry.ENTITY_TYPE.containsKey(ResourceLocation.tryCreate(entityRegistryName))) {
+                event.getDrops().add(itemFur);
+            }
+        }
+
     }
 
 }

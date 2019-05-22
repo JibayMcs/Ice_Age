@@ -10,8 +10,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
+@OnlyIn(Dist.CLIENT)
 public class GuiTemperature extends GuiIngame {
 
     private static final ResourceLocation ICONS = ResourceBuilder.build("textures/gui/icons_temperature.png");

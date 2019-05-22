@@ -33,6 +33,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author MFF Team
+ */
 public class EntityFrozenDeadPlayer extends Entity implements IInventory, IInteractionObject {
     private static final DataParameter<String> USERNAME = EntityDataManager.createKey(EntityFrozenDeadPlayer.class, DataSerializers.STRING);
     private static final DataParameter<String> UUID = EntityDataManager.createKey(EntityFrozenDeadPlayer.class, DataSerializers.STRING);

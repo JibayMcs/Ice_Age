@@ -5,6 +5,7 @@ import fr.zeamateis.ice_age.common.config.IceAgeConfig;
 import fr.zeamateis.ice_age.init.IceAgeCapabilities;
 import fr.zeamateis.ice_age.init.IceAgeGuiHandler;
 import fr.zeamateis.ice_age.init.IceAgeNetwork;
+import fr.zeamateis.ice_age.init.IceAgeRecipes;
 import fr.zeamateis.ice_age.proxy.ClientProxy;
 import fr.zeamateis.ice_age.proxy.CommonProxy;
 import fr.zeamateis.ice_age.proxy.ServerProxy;
@@ -19,6 +20,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -40,7 +42,10 @@ public class IceAgeMod {
     private static final IceAgeConfig CONFIG = new IceAgeConfig();
 
     public IceAgeMod() {
-        CONFIG.register(ModLoadingContext.get());
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CONFIG.CLIENT_SPECS);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CONFIG.COMMON_SPECS);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, CONFIG.SERVER_SPECS);
+
         FMLJavaModLoadingContext.get().getModEventBus().addListener(IceAgeMod::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
@@ -54,6 +59,7 @@ public class IceAgeMod {
         IceAgeGuiHandler.register();
         IceAgeNetwork.register();
         IceAgeCapabilities.register();
+        IceAgeRecipes.register();
         LootTableList.register(ResourceBuilder.build("inject/nether_star_test"));
     }
 

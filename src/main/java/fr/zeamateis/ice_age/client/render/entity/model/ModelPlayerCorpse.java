@@ -7,6 +7,9 @@ import net.minecraft.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+/**
+ * @author MFF Team
+ */
 @OnlyIn(Dist.CLIENT)
 public class ModelPlayerCorpse extends ModelBiped {
 
