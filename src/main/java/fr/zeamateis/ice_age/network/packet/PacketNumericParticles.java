@@ -1,10 +1,6 @@
 package fr.zeamateis.ice_age.network.packet;
 
 import fr.zeamateis.amy.network.IPacket;
-import fr.zeamateis.ice_age.client.particle.type.NumericParticleType;
-import fr.zeamateis.ice_age.init.IceAgeParticles;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -51,13 +47,13 @@ public class PacketNumericParticles implements IPacket<PacketNumericParticles> {
     @Override
     public void handle(PacketNumericParticles packet, Supplier<NetworkEvent.Context> ctxProvider) {
         if (ctxProvider.get().getSender() != null) {
-            WorldClient world = Minecraft.getInstance().world;
+           /* WorldClient world = Minecraft.getInstance().world;
 
             NumericParticleType damageParticle = IceAgeParticles.DAMAGE;
             damageParticle.setNumber(packet.damageAmount);
             damageParticle.setColor(packet.color);
 
-            world.addParticle(damageParticle, packet.x, packet.y, packet.z, packet.xSpeed, packet.ySpeed, packet.zSpeed);
+            world.addParticle(damageParticle, packet.x, packet.y, packet.z, packet.xSpeed, packet.ySpeed, packet.zSpeed);*/
         }
 
         ctxProvider.get().setPacketHandled(true);

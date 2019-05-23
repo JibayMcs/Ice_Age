@@ -4,6 +4,7 @@ import fr.zeamateis.amy.network.AmyNetwork;
 import fr.zeamateis.ice_age.common.IceAgeMod;
 import fr.zeamateis.ice_age.common.capability.player.temperature.CapabilityTemperature;
 import fr.zeamateis.ice_age.common.entity.EntityFrozenDeadPlayer;
+import fr.zeamateis.ice_age.common.item.armor.ItemFurArmor;
 import fr.zeamateis.ice_age.common.world.DayCounterWorldSavedData;
 import fr.zeamateis.ice_age.init.IceAgeDamageSource;
 import fr.zeamateis.ice_age.init.IceAgeItems;
@@ -26,6 +27,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumLightType;
 import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -91,6 +93,31 @@ public class IceAgeEntityEvent {
                     temperature.consume(0.05F);
                 });
             } else if (DayCounterWorldSavedData.get(world).getAgeInDays() >= 15) {
+
+                int randX = world.rand.nextInt(16);
+                int randZ = world.rand.nextInt(16);
+
+                int playerPosX = MathHelper.floor(event.player.posX);
+                int playerPosZ = MathHelper.floor(event.player.posZ);
+                int randY = getTopBlock(world, randX + playerPosX, randZ + playerPosZ);
+                byte effectRange = 7;
+                for (int xOffset = -effectRange; xOffset <= effectRange; xOffset++) {
+                    for (int zOffset = -effectRange; zOffset <= effectRange; zOffset++) {
+
+                        BlockPos blockPos = new BlockPos(randX + playerPosX, randY, randZ + playerPosZ);
+                        Block block = world.getBlockState(blockPos).getBlock();
+
+                        if (world.canBlockSeeSky(blockPos)) {
+
+                            if (block == Blocks.LAVA) {
+                                System.out.println("YAY LAVA");
+
+                                world.setBlockState(blockPos, Blocks.OBSIDIAN.getDefaultState());
+                            }
+                        }
+                    }
+                }
+
                 event.player.getCapability(CapabilityTemperature.TEMPERATURE_CAPABILITY).ifPresent(temperature -> {
 
                     temperature.consume(0.05F);
@@ -121,6 +148,22 @@ public class IceAgeEntityEvent {
                     }
 
                 });
+            }
+
+            ItemStack helmet = event.player.inventory.armorItemInSlot(3);
+            ItemStack chestPlate = event.player.inventory.armorItemInSlot(2);
+            ItemStack leggings = event.player.inventory.armorItemInSlot(1);
+            ItemStack boots = event.player.inventory.armorItemInSlot(0);
+
+            if (helmet != null && chestPlate != null && leggings != null && boots != null) {
+                if (helmet.getItem() instanceof ItemFurArmor &&
+                        chestPlate.getItem() instanceof ItemFurArmor &&
+                        leggings.getItem() instanceof ItemFurArmor &&
+                        boots.getItem() instanceof ItemFurArmor) {
+                    event.player.getCapability(CapabilityTemperature.TEMPERATURE_CAPABILITY).ifPresent(temperature -> {
+                        temperature.warm(0.5F);
+                    });
+                }
             }
 
             if (!world.canSeeSky(event.player.getPosition())) {
@@ -175,10 +218,12 @@ public class IceAgeEntityEvent {
 
         EntityLivingBase entity = event.getEntityLiving();
 
-
-        //if (!world.canSeeSky(entity.getPosition())) {
-
-        // }
+        if (DayCounterWorldSavedData.get(world).getAgeInDays() >= 15)
+            if (world.canSeeSky(entity.getPosition())) {
+                if (entity.isBurning()) {
+                    entity.extinguish();
+                }
+            }
     }
 
 
@@ -266,6 +311,23 @@ public class IceAgeEntityEvent {
 
     }
 
+    public static int getTopBlock(World world, int chunkX, int chunkZ) {
+        try {
+            Chunk chunk = world.getChunk(chunkX, chunkZ);
+            int k = 255;
+
+            while (k > 0) {
+                Block l = chunk.getBlockState(chunkX & 15, k, chunkZ & 15).getBlock();
+                if (l == Blocks.AIR) k--;
+                else return k;
+            }
+
+            return -1;
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
 }
 
 

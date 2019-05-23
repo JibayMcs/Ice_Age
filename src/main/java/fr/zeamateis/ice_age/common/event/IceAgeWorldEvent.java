@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 @Mod.EventBusSubscriber(modid = IceAgeMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class IceAgeWorldEvent {
 
+
     @SubscribeEvent
     public static void onTickWorld(TickEvent.WorldTickEvent event) {
         World world = event.world;
@@ -47,6 +48,7 @@ public class IceAgeWorldEvent {
                                     world.getWorldInfo().setRaining(true);
                                     world.getWorldInfo().setRainTime(100000);
                                 }
+
                             }
                         }
                     }
